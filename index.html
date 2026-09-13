@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jadwal Dinasan KAI & Asesmen</title>
+  <style>
+    :root {
+      --primary: #005691;
+      --secondary: #f7b500;
+      --bg: #f4f7fa;
+      --text: #222;
+      --white: #fff;
+      --shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 20px; }
+    header {
+      background: linear-gradient(135deg, var(--primary), #003d66);
+      color: var(--white);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    header h1 { font-size: 1.8rem; margin-bottom: 5px; }
+    header p { font-size: 0.95rem; opacity: 0.9; }
+    nav {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    nav button {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+    nav button:hover, nav button.active {
+      background: var(--secondary);
+      color: #000;
+    }
+    .container {
+      background: var(--white);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      max-width: 1000px;
+      margin: auto;
+    }
+    .section { display: none; }
+    .section.active { display: block; }
+    h2 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      border-bottom: 2px solid var(--secondary);
+      padding-bottom: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background: var(--primary);
+      color: var(--white);
+    }
+    tr:nth-child(even) { background: #f9f9f9; }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button.action {
+      background: var(--secondary);
+      color: #000;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button.action:hover { background: #e0a300; }
+    .search-box {
+      margin-bottom: 15px;
+    }
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.4rem; }
+      th, td { font-size: 0.85rem; padding: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Jadwal Dinasan KAI & Asesmen</h1>
+  <p>Aplikasi sederhana untuk mencatat jadwal dinasan dan hasil asesmen karyawan</p>
+</header>
+
+<nav>
+  <button class="active" onclick="showSection('jadwal')">Jadwal Dinasan</button>
+  <button onclick="showSection('asesmen')">Asesmen</button>
+  <button onclick="showSection('tentang')">Tentang</button>
+</nav>
+
+<div class="container">
+
+  <!-- JADWAL DINASAN -->
+  <div id="jadwal" class="section active">
+    <h2>📅 Jadwal Dinasan</h2>
+    <div class="search-box">
+      <input type="text" id="searchJadwal" placeholder="Cari nama atau divisi..." onkeyup="filterJadwal()">
+    </div>
+    <table id="tabelJadwal">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Nama</th>
+          <th>Divisi</th>
+          <th>Tanggal</th>
+          <th>Lokasi</th>
+          <th>Keterangan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data akan diisi oleh JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ASESMEN -->
+  <div id="asesmen" class="section">
+    <h2>📝 Input Asesmen</h2>
+    <form id="formAsesmen">
+      <label>Nama Karyawan</label>
+      <input type="text" id="asesmenNama" required>
+
+      <label>Divisi</label>
+      <select id="asesmenDivisi" required>
+        <option value="">-- Pilih Divisi --</option>
+        <option value="Operasi">Operasi</option>
+        <option value="Teknik">Teknik</option>
+        <option value="Keuangan">Keuangan</option>
+        <option value="SDM">SDM</option>
+        <option value="Lainnya">Lainnya</option>
+      </select>
+
+      <label>Nilai Asesmen (0-100)</label>
+      <input type="number" id="asesmenNilai" min="0" max="100" required>
+
+      <label>Catatan</label>
+      <textarea id="asesmenCatatan" rows="3"></textarea>
+
+      <button type="submit" class="action">Simpan Asesmen</button>
+    </form>
+
+    <h3 style="margin-top:20px;">Riwayat Asesmen</h3>
+    <table id="tabelAsesmen">
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Divisi</th>
+          <th>Nilai</th>
+          <th>Catatan</th>
+          <th>Tanggal Input</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data akan diisi oleh JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- TENTANG -->
+  <div id="tentang" class="section">
+    <h2>ℹ️ Tentang Aplikasi</h2>
+    <p>Aplikasi ini dibuat untuk membantu pencatatan jadwal dinasan dan asesmen karyawan di lingkungan KAI.</p>
+    <p><strong>Fitur:</strong></p>
+    <ul>
+      <li>✅ Jadwal dinasan dengan filter pencarian</li>
+      <li>✅ Input dan riwayat asesmen karyawan</li>
+      <li>✅ Data tersimpan di browser (localStorage)</li>
+      <li>✅ Tampilan responsif untuk mobile & desktop</li>
+    </ul>
+    <p style="margin-top:15px;"><em>Dibuat dengan ❤️ untuk kebutuhan internal.</em></p>
+  </div>
+
+</div>
+
+<script>
+  // --- DATA JADWAL DINASAN (contoh) ---
+  const dataJadwal = [
+    { no:1, nama:"Andi Pratama", divisi:"Operasi", tanggal:"2026-09-15", lokasi:"Stasiun Gubeng", ket:"Dinas luar" },
+    { no:2, nama:"Siti Nurhaliza", divisi:"Keuangan", tanggal:"2026-09-16", lokasi:"Kantor Pusat", ket:"Rapat evaluasi" },
+    { no:3, nama:"Budi Santoso", divisi:"Teknik", tanggal:"2026-09-17", lokasi:"Depo Kereta", ket:"Inspeksi rutin" },
+    { no:4, nama:"Dewi Lestari", divisi:"SDM", tanggal:"2026-09-18", lokasi:"Hotel Majapahit", ket:"Pelatihan" }
+  ];
+
+  // --- TAMPILKAN JADWAL ---
+  function renderJadwal(data) {
+    const tbody = document.querySelector("#tabelJadwal tbody");
+    tbody.innerHTML = "";
+    data.forEach(row => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${row.no}</td>
+        <td>${row.nama}</td>
+        <td>${row.divisi}</td>
+        <td>${row.tanggal}</td>
+        <td>${row.lokasi}</td>
+        <td>${row.ket}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // --- FILTER PENCARIAN ---
+  function filterJadwal() {
+    const keyword = document.getElementById("searchJadwal").value.toLowerCase();
+    const filtered = dataJadwal.filter(item =>
+      item.nama.toLowerCase().includes(keyword) ||
+      item.divisi.toLowerCase().includes(keyword)
+    );
+    renderJadwal(filtered);
+  }
+
+  // --- NAVIGASI SECTION ---
+  function showSection(id) {
+    document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
+    document.querySelectorAll("nav button").forEach(btn => btn.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    event.target.classList.add("active");
+  }
+
+  // --- ASESMEN: SIMPAN & TAMPILKAN ---
+  const formAsesmen = document.getElementById("formAsesmen");
+  const tabelAsesmen = document.querySelector("#tabelAsesmen tbody");
+
+  function loadAsesmen() {
+    const data = JSON.parse(localStorage.getItem("asesmenKAI") || "[]");
+    tabelAsesmen.innerHTML = "";
+    data.forEach(item => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${item.nama}</td>
+        <td>${item.divisi}</td>
+        <td>${item.nilai}</td>
+        <td>${item.catatan}</td>
+        <td>${item.tanggal}</td>
+      `;
+      tabelAsesmen.appendChild(tr);
+    });
+  }
+
+  formAsesmen.addEventListener("submit", function(e) {
+    e.preventDefault();
+    const nama = document.getElementById("asesmenNama").value;
+    const divisi = document.getElementById("asesmenDivisi").value;
+    const nilai = document.getElementById("asesmenNilai").value;
+    const catatan = document.getElementById("asesmenCatatan").value;
+    const tanggal = new Date().toLocaleString("id-ID");
+
+    const dataBaru = { nama, divisi, nilai, catatan, tanggal };
+    const dataLama = JSON.parse(localStorage.getItem("asesmenKAI") || "[]");
+    dataLama.push(dataBaru);
+    localStorage.setItem("asesmenKAI", JSON.stringify(dataLama));
+
+    formAsesmen.reset();
+    loadAsesmen();
+    alert("Asesmen berhasil disimpan!");
+  });
+
+  // --- INIT ---
+  renderJadwal(dataJadwal);
+  loadAsesmen();
+</script>
+
+</body>
+</html>
