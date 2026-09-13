@@ -9,23 +9,56 @@
       --primary: #005691;
       --secondary: #f7b500;
       --bg: #f4f7fa;
-      --text: #222;
-      --white: #fff;
+      --card: #ffffff;
+      --text: #222222;
+      --border: #dddddd;
       --shadow: 0 4px 10px rgba(0,0,0,0.1);
+      --table-stripe: #f9f9f9;
     }
+
+    [data-theme="dark"] {
+      --bg: #121212;
+      --card: #1e1e1e;
+      --text: #e0e0e0;
+      --border: #444444;
+      --table-stripe: #2a2a2a;
+      --shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-    body { background: var(--bg); color: var(--text); padding: 20px; }
+    body { background: var(--bg); color: var(--text); padding: 20px; transition: 0.3s; }
+
     header {
       background: linear-gradient(135deg, var(--primary), #003d66);
-      color: var(--white);
+      color: #fff;
       padding: 20px;
       border-radius: 12px;
       text-align: center;
       box-shadow: var(--shadow);
       margin-bottom: 20px;
+      position: relative;
     }
+
     header h1 { font-size: 1.8rem; margin-bottom: 5px; }
     header p { font-size: 0.95rem; opacity: 0.9; }
+
+    .dark-toggle {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: var(--secondary);
+      color: #000;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: 0.3s;
+    }
+
+    .dark-toggle:hover { background: #e0a300; }
+
     nav {
       display: flex;
       gap: 10px;
@@ -33,9 +66,10 @@
       margin-bottom: 20px;
       flex-wrap: wrap;
     }
+
     nav button {
       background: var(--primary);
-      color: var(--white);
+      color: #fff;
       border: none;
       padding: 10px 18px;
       border-radius: 8px;
@@ -43,48 +77,72 @@
       font-weight: 600;
       transition: 0.3s;
     }
+
     nav button:hover, nav button.active {
       background: var(--secondary);
       color: #000;
     }
+
     .container {
-      background: var(--white);
+      background: var(--card);
       padding: 20px;
       border-radius: 12px;
       box-shadow: var(--shadow);
       max-width: 1000px;
       margin: auto;
+      transition: 0.3s;
     }
+
     .section { display: none; }
     .section.active { display: block; }
+
     h2 {
       color: var(--primary);
       margin-bottom: 15px;
       border-bottom: 2px solid var(--secondary);
       padding-bottom: 5px;
     }
+
+    /* Tabel responsif */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
+      min-width: 600px;
     }
+
     th, td {
-      border: 1px solid #ddd;
+      border: 1px solid var(--border);
       padding: 10px;
       text-align: left;
+      white-space: nowrap;
     }
+
     th {
       background: var(--primary);
-      color: var(--white);
+      color: #fff;
     }
-    tr:nth-child(even) { background: #f9f9f9; }
+
+    tr:nth-child(even) { background: var(--table-stripe); }
+
     input, select, textarea {
       width: 100%;
       padding: 8px;
       margin: 5px 0 15px;
-      border: 1px solid #ccc;
+      border: 1px solid var(--border);
       border-radius: 6px;
+      background: var(--card);
+      color: var(--text);
     }
+
     button.action {
       background: var(--secondary);
       color: #000;
@@ -93,14 +151,23 @@
       border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
+      transition: 0.3s;
     }
+
     button.action:hover { background: #e0a300; }
-    .search-box {
-      margin-bottom: 15px;
+
+    .search-box { margin-bottom: 15px; }
+
+    h3 {
+      margin-top: 20px;
+      color: var(--primary);
     }
+
     @media (max-width: 600px) {
       header h1 { font-size: 1.4rem; }
+      header p { font-size: 0.85rem; }
       th, td { font-size: 0.85rem; padding: 6px; }
+      nav button { padding: 8px 12px; font-size: 0.9rem; }
     }
   </style>
 </head>
@@ -109,6 +176,7 @@
 <header>
   <h1>Jadwal Dinasan KAI & Asesmen</h1>
   <p>Aplikasi sederhana untuk mencatat jadwal dinasan dan hasil asesmen karyawan</p>
+  <button class="dark-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
 </header>
 
 <nav>
@@ -125,21 +193,23 @@
     <div class="search-box">
       <input type="text" id="searchJadwal" placeholder="Cari nama atau divisi..." onkeyup="filterJadwal()">
     </div>
-    <table id="tabelJadwal">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Nama</th>
-          <th>Divisi</th>
-          <th>Tanggal</th>
-          <th>Lokasi</th>
-          <th>Keterangan</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Data akan diisi oleh JavaScript -->
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table id="tabelJadwal">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Nama</th>
+            <th>Divisi</th>
+            <th>Tanggal</th>
+            <th>Lokasi</th>
+            <th>Keterangan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Data akan diisi oleh JavaScript -->
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- ASESMEN -->
@@ -168,21 +238,23 @@
       <button type="submit" class="action">Simpan Asesmen</button>
     </form>
 
-    <h3 style="margin-top:20px;">Riwayat Asesmen</h3>
-    <table id="tabelAsesmen">
-      <thead>
-        <tr>
-          <th>Nama</th>
-          <th>Divisi</th>
-          <th>Nilai</th>
-          <th>Catatan</th>
-          <th>Tanggal Input</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Data akan diisi oleh JavaScript -->
-      </tbody>
-    </table>
+    <h3>Riwayat Asesmen</h3>
+    <div class="table-responsive">
+      <table id="tabelAsesmen">
+        <thead>
+          <tr>
+            <th>Nama</th>
+            <th>Divisi</th>
+            <th>Nilai</th>
+            <th>Catatan</th>
+            <th>Tanggal Input</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Data akan diisi oleh JavaScript -->
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- TENTANG -->
@@ -195,6 +267,7 @@
       <li>✅ Input dan riwayat asesmen karyawan</li>
       <li>✅ Data tersimpan di browser (localStorage)</li>
       <li>✅ Tampilan responsif untuk mobile & desktop</li>
+      <li>✅ Dark mode untuk kenyamanan mata</li>
     </ul>
     <p style="margin-top:15px;"><em>Dibuat dengan ❤️ untuk kebutuhan internal.</em></p>
   </div>
@@ -284,7 +357,21 @@
     alert("Asesmen berhasil disimpan!");
   });
 
+  // --- DARK MODE ---
+  function toggleDarkMode() {
+    const html = document.documentElement;
+    const current = html.getAttribute("data-theme");
+    const next = current === "dark" ? "light" : "dark";
+    html.setAttribute("data-theme", next);
+    localStorage.setItem("themeKAI", next);
+    document.querySelector(".dark-toggle").textContent = next === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
+  }
+
   // --- INIT ---
+  const savedTheme = localStorage.getItem("themeKAI") || "light";
+  document.documentElement.setAttribute("data-theme", savedTheme);
+  document.querySelector(".dark-toggle").textContent = savedTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
+
   renderJadwal(dataJadwal);
   loadAsesmen();
 </script>
