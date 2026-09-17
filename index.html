@@ -2,379 +2,539 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Jadwal Dinasan KAI & Asesmen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jadwal Job Dinasan Freelance - KAI</title>
   <style>
     :root {
-      --primary: #005691;
-      --secondary: #f7b500;
-      --bg: #f4f7fa;
-      --card: #ffffff;
-      --text: #222222;
-      --border: #dddddd;
-      --shadow: 0 4px 10px rgba(0,0,0,0.1);
-      --table-stripe: #f9f9f9;
+      --bg-primary: #f5f7fa;
+      --bg-card: #ffffff;
+      --text-primary: #1a1a1a;
+      --text-secondary: #555555;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
     [data-theme="dark"] {
-      --bg: #121212;
-      --card: #1e1e1e;
-      --text: #e0e0e0;
-      --border: #444444;
-      --table-stripe: #2a2a2a;
-      --shadow: 0 4px 10px rgba(0,0,0,0.5);
+      --bg-primary: #0f172a;
+      --bg-card: #1e293b;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --accent: #3b82f6;
+      --accent-hover: #60a5fa;
+      --border: #334155;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-    body { background: var(--bg); color: var(--text); padding: 20px; transition: 0.3s; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
 
     header {
-      background: linear-gradient(135deg, var(--primary), #003d66);
-      color: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: var(--shadow);
-      margin-bottom: 20px;
-      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 15px;
     }
 
-    header h1 { font-size: 1.8rem; margin-bottom: 5px; }
-    header p { font-size: 0.95rem; opacity: 0.9; }
+    h1 {
+      font-size: 1.8rem;
+      color: var(--text-primary);
+    }
 
-    .dark-toggle {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background: var(--secondary);
-      color: #000;
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      background: var(--accent);
+      color: white;
       border: none;
-      padding: 8px 12px;
+      padding: 10px 20px;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 0.85rem;
-      transition: 0.3s;
+      transition: background 0.2s;
     }
 
-    .dark-toggle:hover { background: #e0a300; }
+    button:hover {
+      background: var(--accent-hover);
+    }
 
-    nav {
+    button.secondary {
+      background: transparent;
+      border: 2px solid var(--border);
+      color: var(--text-primary);
+    }
+
+    button.secondary:hover {
+      background: var(--border);
+    }
+
+    .filters {
       display: flex;
       gap: 10px;
-      justify-content: center;
       margin-bottom: 20px;
       flex-wrap: wrap;
     }
 
-    nav button {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: 0.3s;
+    .filter-btn {
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      color: var(--text-secondary);
     }
 
-    nav button:hover, nav button.active {
-      background: var(--secondary);
-      color: #000;
+    .filter-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
     }
 
-    .container {
-      background: var(--card);
-      padding: 20px;
+    .jobs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+    }
+
+    .job-card {
+      background: var(--bg-card);
       border-radius: 12px;
+      padding: 20px;
       box-shadow: var(--shadow);
-      max-width: 1000px;
-      margin: auto;
-      transition: 0.3s;
+      border: 1px solid var(--border);
+      transition: transform 0.2s;
     }
 
-    .section { display: none; }
-    .section.active { display: block; }
+    .job-card:hover {
+      transform: translateY(-3px);
+    }
 
-    h2 {
-      color: var(--primary);
+    .job-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
       margin-bottom: 15px;
-      border-bottom: 2px solid var(--secondary);
-      padding-bottom: 5px;
     }
 
-    /* Tabel responsif */
-    .table-responsive {
-      width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      margin-top: 10px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
+    .job-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 600px;
-    }
-
-    th, td {
-      border: 1px solid var(--border);
-      padding: 10px;
-      text-align: left;
-      white-space: nowrap;
-    }
-
-    th {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    tr:nth-child(even) { background: var(--table-stripe); }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 8px;
-      margin: 5px 0 15px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: var(--card);
-      color: var(--text);
-    }
-
-    button.action {
-      background: var(--secondary);
-      color: #000;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 6px;
-      cursor: pointer;
+    .job-status {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
       font-weight: 600;
-      transition: 0.3s;
     }
 
-    button.action:hover { background: #e0a300; }
-
-    .search-box { margin-bottom: 15px; }
-
-    h3 {
-      margin-top: 20px;
-      color: var(--primary);
+    .status-selesai {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
     }
 
-    @media (max-width: 600px) {
-      header h1 { font-size: 1.4rem; }
-      header p { font-size: 0.85rem; }
-      th, td { font-size: 0.85rem; padding: 6px; }
-      nav button { padding: 8px 12px; font-size: 0.9rem; }
+    .status-proses {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--warning);
+    }
+
+    .status-mendatang {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--info);
+    }
+
+    .job-details {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .detail-row {
+      display: flex;
+      gap: 10px;
+      font-size: 0.95rem;
+    }
+
+    .detail-label {
+      color: var(--text-secondary);
+      min-width: 100px;
+    }
+
+    .detail-value {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .job-description {
+      background: var(--bg-primary);
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-bottom: 15px;
+    }
+
+    .job-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .job-actions button {
+      flex: 1;
+      padding: 8px;
+      font-size: 0.9rem;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--bg-card);
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 768px) {
+      .jobs-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .header-actions {
+        width: 100%;
+      }
+
+      .header-actions button {
+        flex: 1;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <header>
+      <h1>📅 Jadwal Job Dinasan Freelance - KAI</h1>
+      <div class="header-actions">
+        <button onclick="openModal()">+ Tambah Job</button>
+        <button class="secondary" onclick="toggleTheme()">🌓 Dark Mode</button>
+      </div>
+    </header>
 
-<header>
-  <h1>Jadwal Dinasan KAI & Asesmen</h1>
-  <p>Aplikasi sederhana untuk mencatat jadwal dinasan dan hasil asesmen karyawan</p>
-  <button class="dark-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
-</header>
-
-<nav>
-  <button class="active" onclick="showSection('jadwal')">Jadwal Dinasan</button>
-  <button onclick="showSection('asesmen')">Asesmen</button>
-  <button onclick="showSection('tentang')">Tentang</button>
-</nav>
-
-<div class="container">
-
-  <!-- JADWAL DINASAN -->
-  <div id="jadwal" class="section active">
-    <h2>Jadwal Dinasan</h2>
-    <div class="search-box">
-      <input type="text" id="searchJadwal" placeholder="Cari nama atau divisi..." onkeyup="filterJadwal()">
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterJobs('all')">Semua</button>
+      <button class="filter-btn" onclick="filterJobs('mendatang')">Mendatang</button>
+      <button class="filter-btn" onclick="filterJobs('proses')">Dalam Proses</button>
+      <button class="filter-btn" onclick="filterJobs('selesai')">Selesai</button>
     </div>
-    <div class="table-responsive">
-      <table id="tabelJadwal">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Nama</th>
-            <th>Divisi</th>
-            <th>Tanggal</th>
-            <th>Lokasi</th>
-            <th>Keterangan</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Data akan diisi oleh JavaScript -->
-        </tbody>
-      </table>
-    </div>
+
+    <div id="jobsGrid" class="jobs-grid"></div>
   </div>
 
-  <!-- ASESMEN -->
-  <div id="asesmen" class="section">
-    <h2>📝 Input Asesmen</h2>
-    <form id="formAsesmen">
-      <label>Nama Karyawan</label>
-      <input type="text" id="asesmenNama" required>
-
-      <label>Divisi</label>
-      <select id="asesmenDivisi" required>
-        <option value="">-- Pilih Divisi --</option>
-        <option value="Operasi">Operasi</option>
-        <option value="Teknik">Teknik</option>
-        <option value="Keuangan">Keuangan</option>
-        <option value="SDM">SDM</option>
-        <option value="Lainnya">Lainnya</option>
-      </select>
-
-      <label>Nilai Asesmen (0-100)</label>
-      <input type="number" id="asesmenNilai" min="0" max="100" required>
-
-      <label>Catatan</label>
-      <textarea id="asesmenCatatan" rows="3"></textarea>
-
-      <button type="submit" class="action">Simpan Asesmen</button>
-    </form>
-
-    <h3>Riwayat Asesmen</h3>
-    <div class="table-responsive">
-      <table id="tabelAsesmen">
-        <thead>
-          <tr>
-            <th>Nama</th>
-            <th>Divisi</th>
-            <th>Nilai</th>
-            <th>Catatan</th>
-            <th>Tanggal Input</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Data akan diisi oleh JavaScript -->
-        </tbody>
-      </table>
+  <!-- Modal Tambah/Edit Job -->
+  <div id="jobModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Tambah Job Baru</h2>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <form id="jobForm" onsubmit="saveJob(event)">
+        <input type="hidden" id="jobId" />
+        <div class="form-group">
+          <label for="jobTitle">Nama Job / Tugas</label>
+          <input type="text" id="jobTitle" required placeholder="Contoh: Input Data Penumpang" />
+        </div>
+        <div class="form-group">
+          <label for="jobLocation">Lokasi</label>
+          <input type="text" id="jobLocation" required placeholder="Contoh: Stasiun Gubeng" />
+        </div>
+        <div class="form-group">
+          <label for="jobDate">Tanggal</label>
+          <input type="date" id="jobDate" required />
+        </div>
+        <div class="form-group">
+          <label for="jobTime">Waktu</label>
+          <input type="time" id="jobTime" required />
+        </div>
+        <div class="form-group">
+          <label for="jobStatus">Status</label>
+          <select id="jobStatus" required>
+            <option value="mendatang">Mendatang</option>
+            <option value="proses">Dalam Proses</option>
+            <option value="selesai">Selesai</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="jobDescription">Deskripsi</label>
+          <textarea id="jobDescription" placeholder="Deskripsi tugas..."></textarea>
+        </div>
+        <button type="submit">Simpan</button>
+      </form>
     </div>
   </div>
 
-  <!-- TENTANG -->
-  <div id="tentang" class="section">
-    <h2>ℹ️ Tentang Aplikasi</h2>
-    <p>Aplikasi ini dibuat untuk membantu pencatatan jadwal dinasan dan asesmen karyawan di lingkungan KAI.</p>
-    <p><strong>Fitur:</strong></p>
-    <ul>
-      <li>✅ Jadwal dinasan dengan filter pencarian</li>
-      <li>✅ Input dan riwayat asesmen karyawan</li>
-      <li>✅ Data tersimpan di browser (localStorage)</li>
-      <li>✅ Tampilan responsif untuk mobile & desktop</li>
-      <li>✅ Dark mode untuk kenyamanan mata</li>
-    </ul>
-    <p style="margin-top:15px;"><em>Dibuat dengan ❤️ untuk kebutuhan internal.</em></p>
-  </div>
+  <script>
+    let jobs = JSON.parse(localStorage.getItem('kaiJobs')) || [];
+    let currentFilter = 'all';
 
-</div>
+    function saveToStorage() {
+      localStorage.setItem('kaiJobs', JSON.stringify(jobs));
+    }
 
-<script>
-  // --- DATA JADWAL DINASAN (contoh) ---
-  const dataJadwal = [
-    { no:1, nama:"Andi Pratama", divisi:"Team Editing Humas", tanggal:"2026-09-15", lokasi:"Stasiun Malang", ket:"Dinasan LB" },
-    { no:2, nama:"Fitrah Ramadhani", divisi:"Team Proses Humas", tanggal:"2026-09-13 s/d 2026-09-16", lokasi:"SGU-SBI-ML-KPJ", ket:"Dokumentasi" },
-    { no:3, nama:"Budi Santoso", divisi:"Teknik", tanggal:"2026-09-14", lokasi:"Pusdalopka 8", ket:"Inspeksi rutin" },
-    { no:4, nama:"Dewi Lestari", divisi:"SDM", tanggal:"2026-09-13 s/d 2026-09-17", lokasi:"ML-KPJ", ket:"Pendampingan Humas" }
-  ];
+    function renderJobs() {
+      const grid = document.getElementById('jobsGrid');
+      let filteredJobs = jobs;
 
-  // --- TAMPILKAN JADWAL ---
-  function renderJadwal(data) {
-    const tbody = document.querySelector("#tabelJadwal tbody");
-    tbody.innerHTML = "";
-    data.forEach(row => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${row.no}</td>
-        <td>${row.nama}</td>
-        <td>${row.divisi}</td>
-        <td>${row.tanggal}</td>
-        <td>${row.lokasi}</td>
-        <td>${row.ket}</td>
-      `;
-      tbody.appendChild(tr);
+      if (currentFilter !== 'all') {
+        filteredJobs = jobs.filter(job => job.status === currentFilter);
+      }
+
+      if (filteredJobs.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <h3>📭 Belum ada job</h3>
+            <p>Klik tombol "+ Tambah Job" untuk menambahkan jadwal dinasan.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filteredJobs.map(job => `
+        <div class="job-card">
+          <div class="job-header">
+            <div class="job-title">${job.title}</div>
+            <div class="job-status status-${job.status}">${formatStatus(job.status)}</div>
+          </div>
+          <div class="job-details">
+            <div class="detail-row">
+              <span class="detail-label">📍 Lokasi</span>
+              <span class="detail-value">${job.location}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">📅 Tanggal</span>
+              <span class="detail-value">${formatDate(job.date)}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">⏰ Waktu</span>
+              <span class="detail-value">${job.time}</span>
+            </div>
+          </div>
+          ${job.description ? `<div class="job-description">${job.description}</div>` : ''}
+          <div class="job-actions">
+            <button class="secondary" onclick="editJob(${job.id})">Edit</button>
+            <button onclick="deleteJob(${job.id})">Hapus</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function formatStatus(status) {
+      const statusMap = {
+        'mendatang': 'Mendatang',
+        'proses': 'Dalam Proses',
+        'selesai': 'Selesai'
+      };
+      return statusMap[status] || status;
+    }
+
+    function formatDate(dateString) {
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString('id-ID', options);
+    }
+
+    function filterJobs(status) {
+      currentFilter = status;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      renderJobs();
+    }
+
+    function openModal(jobId = null) {
+      const modal = document.getElementById('jobModal');
+      const form = document.getElementById('jobForm');
+      const title = document.getElementById('modalTitle');
+
+      form.reset();
+      document.getElementById('jobId').value = '';
+
+      if (jobId) {
+        const job = jobs.find(j => j.id === jobId);
+        if (job) {
+          title.textContent = 'Edit Job';
+          document.getElementById('jobId').value = job.id;
+          document.getElementById('jobTitle').value = job.title;
+          document.getElementById('jobLocation').value = job.location;
+          document.getElementById('jobDate').value = job.date;
+          document.getElementById('jobTime').value = job.time;
+          document.getElementById('jobStatus').value = job.status;
+          document.getElementById('jobDescription').value = job.description || '';
+        }
+      } else {
+        title.textContent = 'Tambah Job Baru';
+      }
+
+      modal.classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('jobModal').classList.remove('active');
+    }
+
+    function saveJob(event) {
+      event.preventDefault();
+      const id = document.getElementById('jobId').value;
+      const jobData = {
+        id: id ? parseInt(id) : Date.now(),
+        title: document.getElementById('jobTitle').value,
+        location: document.getElementById('jobLocation').value,
+        date: document.getElementById('jobDate').value,
+        time: document.getElementById('jobTime').value,
+        status: document.getElementById('jobStatus').value,
+        description: document.getElementById('jobDescription').value
+      };
+
+      if (id) {
+        const index = jobs.findIndex(j => j.id === parseInt(id));
+        jobs[index] = jobData;
+      } else {
+        jobs.push(jobData);
+      }
+
+      saveToStorage();
+      closeModal();
+      renderJobs();
+    }
+
+    function editJob(id) {
+      openModal(id);
+    }
+
+    function deleteJob(id) {
+      if (confirm('Yakin ingin menghapus job ini?')) {
+        jobs = jobs.filter(j => j.id !== id);
+        saveToStorage();
+        renderJobs();
+      }
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    }
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    // Initial render
+    renderJobs();
+
+    // Close modal on outside click
+    document.getElementById('jobModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal();
+      }
     });
-  }
-
-  // --- FILTER PENCARIAN ---
-  function filterJadwal() {
-    const keyword = document.getElementById("searchJadwal").value.toLowerCase();
-    const filtered = dataJadwal.filter(item =>
-      item.nama.toLowerCase().includes(keyword) ||
-      item.divisi.toLowerCase().includes(keyword)
-    );
-    renderJadwal(filtered);
-  }
-
-  // --- NAVIGASI SECTION ---
-  function showSection(id) {
-    document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
-    document.querySelectorAll("nav button").forEach(btn => btn.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-    event.target.classList.add("active");
-  }
-
-  // --- ASESMEN: SIMPAN & TAMPILKAN ---
-  const formAsesmen = document.getElementById("formAsesmen");
-  const tabelAsesmen = document.querySelector("#tabelAsesmen tbody");
-
-  function loadAsesmen() {
-    const data = JSON.parse(localStorage.getItem("asesmenKAI") || "[]");
-    tabelAsesmen.innerHTML = "";
-    data.forEach(item => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${item.nama}</td>
-        <td>${item.divisi}</td>
-        <td>${item.nilai}</td>
-        <td>${item.catatan}</td>
-        <td>${item.tanggal}</td>
-      `;
-      tabelAsesmen.appendChild(tr);
-    });
-  }
-
-  formAsesmen.addEventListener("submit", function(e) {
-    e.preventDefault();
-    const nama = document.getElementById("asesmenNama").value;
-    const divisi = document.getElementById("asesmenDivisi").value;
-    const nilai = document.getElementById("asesmenNilai").value;
-    const catatan = document.getElementById("asesmenCatatan").value;
-    const tanggal = new Date().toLocaleString("id-ID");
-
-    const dataBaru = { nama, divisi, nilai, catatan, tanggal };
-    const dataLama = JSON.parse(localStorage.getItem("asesmenKAI") || "[]");
-    dataLama.push(dataBaru);
-    localStorage.setItem("asesmenKAI", JSON.stringify(dataLama));
-
-    formAsesmen.reset();
-    loadAsesmen();
-    alert("Asesmen berhasil disimpan!");
-  });
-
-  // --- DARK MODE ---
-  function toggleDarkMode() {
-    const html = document.documentElement;
-    const current = html.getAttribute("data-theme");
-    const next = current === "dark" ? "light" : "dark";
-    html.setAttribute("data-theme", next);
-    localStorage.setItem("themeKAI", next);
-    document.querySelector(".dark-toggle").textContent = next === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
-  }
-
-  // --- INIT ---
-  const savedTheme = localStorage.getItem("themeKAI") || "light";
-  document.documentElement.setAttribute("data-theme", savedTheme);
-  document.querySelector(".dark-toggle").textContent = savedTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
-
-  renderJadwal(dataJadwal);
-  loadAsesmen();
-</script>
-
+  </script>
 </body>
 </html>
